@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create zip
+        run: zip safe.html.zip safe.html verify.html
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: safe.html.zip
+          make_latest: true
+          body: |
+            ## safe.html ${{ github.ref_name }}
+
+            ### Download
+
+            Download `safe.html.zip`, unzip, open `safe.html` in any browser.
+
+            ### Verify integrity
+
+            Use the included `verify.html` to verify your `safe.html` file hasn't been tampered with.
+            
+            ### Usage
+
+            Open `safe.html` in Chrome, Edge, Firefox, or Safari.
